@@ -16,7 +16,7 @@ class Profile extends StatelessWidget {
           width: 150,
           height: 150,
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.blue, width: 4.0),
+            border: Border.all(color: Colors.red[900], width: 4.0),
             shape: BoxShape.circle,
             image: DecorationImage(
               fit: BoxFit.fill,
@@ -25,7 +25,7 @@ class Profile extends StatelessWidget {
           ),
         ),
         SizedBox(height: 24.0),
-        Text('Name: $name'),
+        Text(name),
         SizedBox(height: 48.0),
         RaisedButton(
           onPressed: () {
