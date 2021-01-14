@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class Login extends StatelessWidget {
@@ -11,6 +13,9 @@ class Login extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
+        Image(
+          image: AssetImage("images/dice.png"),
+        ),
         RaisedButton(
           onPressed: () {
             loginAction();
@@ -18,6 +23,7 @@ class Login extends StatelessWidget {
           child: Text('Login'),
         ),
         Text(loginError ?? ''),
+        Text(Platform.operatingSystem)
       ],
     );
   }
