@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:game_app_flutter/auth0.dart';
@@ -22,10 +23,14 @@ class _HomePageState extends State<HomePage> {
   String errorMessage;
   String name;
   String picture;
+  Object auth0;
 
   @override
   void initState() {
-    initAction();
+    if (!kIsWeb)
+      initAction();
+    else
+      initWeb();
     super.initState();
   }
 
@@ -59,6 +64,8 @@ class _HomePageState extends State<HomePage> {
       logoutAction();
     }
   }
+
+  void initWeb() async {}
 
   Map<String, dynamic> parseIdToken(String idToken) {
     final parts = idToken.split(r'.');

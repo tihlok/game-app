@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 class Login extends StatelessWidget {
@@ -14,16 +15,16 @@ class Login extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Image(
-          image: AssetImage("images/dice.png"),
+          image: AssetImage("assets/dice.png"),
         ),
         RaisedButton(
           onPressed: () {
             loginAction();
           },
-          child: Text('Login'),
+          child: Text("Login"),
         ),
-        Text(loginError ?? ''),
-        Text(Platform.operatingSystem)
+        Text(loginError ?? ""),
+        Text(kIsWeb ? "web" : Platform.operatingSystem)
       ],
     );
   }
