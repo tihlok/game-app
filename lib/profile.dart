@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:game_app_flutter/player.dart';
+import 'package:game_app_flutter/theme.dart';
 
 import 'app.dart';
 
@@ -21,7 +22,7 @@ class Profile extends StatelessWidget {
           width: 150,
           height: 150,
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.red[900], width: 4.0),
+            border: Border.all(color: primary, width: 4.0),
             shape: BoxShape.circle,
             image: DecorationImage(
               fit: BoxFit.fill,

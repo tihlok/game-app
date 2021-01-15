@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:game_app_flutter/app.dart';
 import 'package:game_app_flutter/player.dart';
+import 'package:game_app_flutter/theme.dart';
 
 class Login extends StatelessWidget {
   const Login();
@@ -18,7 +19,7 @@ class Login extends StatelessWidget {
           image: AssetImage("assets/dice.png"),
         ),
         InkWell(
-          splashColor: Colors.red[900],
+          splashColor: primary,
           onTap: () => _onLoginPressed(),
           child: Text("Login"),
         )

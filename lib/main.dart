@@ -5,6 +5,7 @@ import 'package:game_app_flutter/personas.dart';
 import 'package:game_app_flutter/player.dart';
 import 'package:game_app_flutter/profile.dart';
 import 'package:game_app_flutter/tab.dart';
+import 'package:game_app_flutter/theme.dart';
 
 import 'app.dart';
 
@@ -19,17 +20,17 @@ class RPGApp extends StatelessWidget {
     return MaterialApp(
       title: 'RPG',
       theme: ThemeData(
-          primaryColor: Colors.red[900],
-          accentColor: Colors.white,
-          scaffoldBackgroundColor: Color(0xFF1F1F1F),
+          primaryColor: primary,
+          accentColor: white,
+          scaffoldBackgroundColor: background,
           textTheme: TextTheme(
-            subtitle1: TextStyle(color: Colors.white),
-            caption: TextStyle(color: Colors.white),
-            bodyText2: TextStyle(color: Colors.white),
+            subtitle1: TextStyle(color: white),
+            caption: TextStyle(color: white),
+            bodyText2: TextStyle(color: white),
           ),
           buttonTheme: ButtonThemeData(
             textTheme: ButtonTextTheme.primary,
-            buttonColor: Colors.red[900],
+            buttonColor: primary,
           )),
       home: StoreProvider<AppState>(
         store: Redux.store,
@@ -45,10 +46,10 @@ class AppPage extends StatefulWidget {
   final String title;
 
   @override
-  _AppPageState createState() => _AppPageState();
+  AppPageState createState() => AppPageState();
 }
 
-class _AppPageState extends State<AppPage> {
+class AppPageState extends State<AppPage> with TickerProviderStateMixin {
   @override
   void initState() {
     Redux.store.dispatch(playerTryQuickLoginAction);
@@ -71,16 +72,16 @@ class _AppPageState extends State<AppPage> {
               child: Scaffold(
                 appBar: state.player.isLoggedIn
                     ? AppBar(
-                  title: Center(child: Text("RPG")),
-                  bottom: TabBar(tabs: tabs.map((e) => e.tab).toList()),
-                )
+                        title: Center(child: Text("RPG")),
+                        bottom: TabBar(tabs: tabs.map((e) => e.tab).toList()),
+                      )
                     : null,
                 body: Center(
                     child: state.player.isLoading
                         ? CircularProgressIndicator()
                         : state.player.isLoggedIn
-                        ? TabBarView(children: tabs.map((e) => e.page).toList())
-                        : Login()),
+                            ? TabBarView(children: tabs.map((e) => e.page).toList())
+                            : Login()),
               ));
         });
   }
