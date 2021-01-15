@@ -71,16 +71,16 @@ class _AppPageState extends State<AppPage> {
               child: Scaffold(
                 appBar: state.player.isLoggedIn
                     ? AppBar(
-                        title: Center(child: Text("RPG")),
-                        bottom: TabBar(tabs: tabs.map((e) => e.tab).toList()),
-                      )
+                  title: Center(child: Text("RPG")),
+                  bottom: TabBar(tabs: tabs.map((e) => e.tab).toList()),
+                )
                     : null,
                 body: Center(
                     child: state.player.isLoading
                         ? CircularProgressIndicator()
                         : state.player.isLoggedIn
-                            ? TabBarView(children: tabs.map((e) => e.page).toList())
-                            : Login()),
+                        ? TabBarView(children: tabs.map((e) => e.page).toList())
+                        : Login()),
               ));
         });
   }

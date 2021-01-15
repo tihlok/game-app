@@ -88,7 +88,13 @@ class Personas extends StatelessWidget {
                     child: InkWell(
                       splashColor: Colors.red[900],
                       highlightColor: Colors.transparent,
-                      onTap: () {},
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PersonaDetail(
+                                  persona: this.state.persona.personas[index],
+                                )),
+                      ),
                       child: Card(
                           semanticContainer: true,
                           clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -110,5 +116,22 @@ class Personas extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[Text("nenhuma persona aqui...")],
           );
+  }
+}
+
+class PersonaDetail extends StatelessWidget {
+  final Persona persona;
+
+  PersonaDetail({this.persona});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Center(child: Text(persona.name)),
+        ),
+        body: Center(
+          child: Text("RPG"),
+        ));
   }
 }
