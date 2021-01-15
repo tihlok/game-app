@@ -43,8 +43,7 @@ class _AppPageState extends State<AppPage> {
   bool isBusy = false;
   bool isLoggedIn = false;
   String errorMessage;
-  String name;
-  String picture;
+  Map<String, Map<String, dynamic>> player;
 
   @override
   void initState() {
@@ -76,8 +75,7 @@ class _AppPageState extends State<AppPage> {
       setState(() {
         isBusy = false;
         isLoggedIn = true;
-        name = idToken['name'];
-        picture = profile['picture'];
+        player = {"idToken": idToken, "profile": profile};
       });
     } catch (e, s) {
       print('error on refresh token: $e - stack: $s');
@@ -120,8 +118,7 @@ class _AppPageState extends State<AppPage> {
       setState(() {
         isBusy = false;
         isLoggedIn = true;
-        name = idToken['name'];
-        picture = profile['picture'];
+        player = {"idToken": idToken, "profile": profile};
       });
     } catch (e, s) {
       print('login error: $e - stack: $s');
@@ -144,7 +141,7 @@ class _AppPageState extends State<AppPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = [
-      TabData(icon: Icons.settings, page: Profile(logoutAction, name, picture)),
+      TabData(icon: Icons.settings, page: Profile(logoutAction, player)),
     ];
 
     return DefaultTabController(

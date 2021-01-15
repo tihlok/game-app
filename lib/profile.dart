@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 class Profile extends StatelessWidget {
   final logoutAction;
-  final String name;
-  final String picture;
+  final Map<String, Map<String, dynamic>> player;
 
-  Profile(this.logoutAction, this.name, this.picture);
+  Profile(this.logoutAction, this.player);
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +19,15 @@ class Profile extends StatelessWidget {
             shape: BoxShape.circle,
             image: DecorationImage(
               fit: BoxFit.fill,
-              image: NetworkImage(picture ?? ''),
+              image: NetworkImage(this.player["profile"]["picture"] ?? ''),
             ),
           ),
         ),
         SizedBox(height: 24.0),
-        Text(name),
+        Text(this.player["idToken"]["name"]),
         SizedBox(height: 48.0),
+        // Text(this.player.toString()),
+        // SizedBox(height: 48.0),
         RaisedButton(
           onPressed: () {
             logoutAction();
