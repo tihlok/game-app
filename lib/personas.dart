@@ -81,24 +81,30 @@ class Personas extends StatelessWidget {
             color: Colors.red[900],
             onRefresh: _onRefresh,
             child: ListView.builder(
-              padding: EdgeInsets.all(8),
-              itemCount: this.state.persona.personas.length,
-              itemBuilder: (context, index) => Card(
-                child: Column(
-                  children: <Widget>[
-                    ListTile(
-                      leading: CircleAvatar(
-                        radius: 30,
-                        backgroundImage: NetworkImage(this.state.persona.personas[index].imageURL),
-                      ),
-                      title: Text(this.state.persona.personas[index].name),
-                      subtitle: Text("level: ${this.state.persona.personas[index].level}"),
-                      trailing: Text("power: ${this.state.persona.personas[index].power}"),
-                    )
-                  ],
-                ),
-              ),
-            ),
+                padding: EdgeInsets.all(8),
+                itemCount: this.state.persona.personas.length,
+                itemBuilder: (context, index) => Container(
+                    height: 80,
+                    child: InkWell(
+                      splashColor: Colors.red[900],
+                      highlightColor: Colors.transparent,
+                      onTap: () {},
+                      child: Card(
+                          semanticContainer: true,
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                          elevation: 5,
+                          child: ListTile(
+                            tileColor: Color(0xFF1F1F1F),
+                            leading: CircleAvatar(
+                              radius: 30,
+                              backgroundImage: NetworkImage(this.state.persona.personas[index].imageURL),
+                            ),
+                            title: Text(this.state.persona.personas[index].name),
+                            subtitle: Text("level: ${this.state.persona.personas[index].level}"),
+                            trailing: Text("power: ${this.state.persona.personas[index].power}"),
+                          )),
+                    ))),
           )
         : Column(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -17,10 +17,11 @@ class Login extends StatelessWidget {
         Image(
           image: AssetImage("assets/dice.png"),
         ),
-        RaisedButton(
-          onPressed: () => _onLoginPressed(),
+        InkWell(
+          splashColor: Colors.red[900],
+          onTap: () => _onLoginPressed(),
           child: Text("Login"),
-        ),
+        )
       ],
     );
   }

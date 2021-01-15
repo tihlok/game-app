@@ -22,7 +22,11 @@ class RPGApp extends StatelessWidget {
           primaryColor: Colors.red[900],
           accentColor: Colors.white,
           scaffoldBackgroundColor: Color(0xFF1F1F1F),
-          textTheme: TextTheme(bodyText2: TextStyle(color: Colors.white)),
+          textTheme: TextTheme(
+            subtitle1: TextStyle(color: Colors.white),
+            caption: TextStyle(color: Colors.white),
+            bodyText2: TextStyle(color: Colors.white),
+          ),
           buttonTheme: ButtonThemeData(
             textTheme: ButtonTextTheme.primary,
             buttonColor: Colors.red[900],
