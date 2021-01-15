@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_appauth/flutter_appauth.dart';
-import 'package:game_app_flutter/auth0.dart';
+import 'package:game_app_flutter/config.dart';
+import 'package:game_app_flutter/personas.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:redux/redux.dart';
@@ -23,6 +24,12 @@ class PlayerState {
     this.idToken,
     this.profile,
   });
+
+  get id => this.profile["sub"];
+
+  get picture => this.profile["picture"] ?? '';
+
+  get name => this.idToken["name"] ?? '';
 
   factory PlayerState.initial() => PlayerState(
         isError: false,
@@ -66,48 +73,19 @@ playerReducer(PlayerState state, SetPlayerStateAction action) {
   );
 }
 
-Future<void> playerTryQuickLoginAction(Store<AppState> store) async {
-  store.dispatch(SetPlayerStateAction(PlayerState(isLoading: true)));
-  final refreshToken = await secureStorage.read(key: 'refresh_token');
-  if (refreshToken == null) return store.dispatch(SetPlayerStateAction(PlayerState(isLoading: false)));
+Future<void> loginAction({Store<AppState> store, refreshToken, function}) async {
   try {
-    final result = await appAuth.token(TokenRequest(
-      AUTH0_CLIENT_ID,
-      AUTH0_REDIRECT_URI,
-      issuer: AUTH0_ISSUER,
-      refreshToken: refreshToken,
-    ));
-    secureStorage.write(key: 'refresh_token', value: result.refreshToken ?? refreshToken);
+    final result = await function();
+    await secureStorage.write(key: 'refresh_token', value: result.refreshToken ?? refreshToken);
+    await store.dispatch(SetPlayerStateAction(PlayerState(
+      idToken: parseIdToken(result.idToken),
+      profile: await getUserDetails(result.accessToken),
+    )));
+    await store.dispatch(loadPersonas);
     return store.dispatch(SetPlayerStateAction(PlayerState(
       isLoading: false,
       isError: false,
       isLoggedIn: true,
-      idToken: parseIdToken(result.idToken),
-      profile: await getUserDetails(result.accessToken),
-    )));
-  } catch (e, s) {
-    print('error on refresh token: $e - stack: $s');
-    return store.dispatch(SetPlayerStateAction(PlayerState(
-      isLoading: false,
-      isError: true,
-      isLoggedIn: false,
-    )));
-  }
-}
-
-Future<void> playerLoginAction(Store<AppState> store) async {
-  store.dispatch(SetPlayerStateAction(PlayerState(isLoading: true)));
-  try {
-    final AuthorizationTokenResponse result = await appAuth.authorizeAndExchangeCode(
-      AuthorizationTokenRequest(AUTH0_CLIENT_ID, AUTH0_REDIRECT_URI, issuer: 'https://$AUTH0_DOMAIN', scopes: ['openid', 'profile', 'offline_access'], promptValues: ['login']),
-    );
-    await secureStorage.write(key: 'refresh_token', value: result.refreshToken);
-    return store.dispatch(SetPlayerStateAction(PlayerState(
-      isLoading: false,
-      isError: false,
-      isLoggedIn: true,
-      idToken: parseIdToken(result.idToken),
-      profile: await getUserDetails(result.accessToken),
     )));
   } catch (e, s) {
     print('login error: $e - stack: $s');
@@ -117,6 +95,27 @@ Future<void> playerLoginAction(Store<AppState> store) async {
       isLoggedIn: false,
     )));
   }
+}
+
+Future<void> playerTryQuickLoginAction(Store<AppState> store) async {
+  store.dispatch(SetPlayerStateAction(PlayerState(isLoading: true)));
+  final refreshToken = await secureStorage.read(key: 'refresh_token');
+  if (refreshToken == null) return store.dispatch(SetPlayerStateAction(PlayerState(isLoading: false)));
+  return loginAction(
+    store: store,
+    refreshToken: refreshToken,
+    function: () async => await appAuth.token(TokenRequest(AUTH0_CLIENT_ID, AUTH0_REDIRECT_URI, issuer: AUTH0_ISSUER, refreshToken: refreshToken)),
+  );
+}
+
+Future<void> playerLoginAction(Store<AppState> store) async {
+  store.dispatch(SetPlayerStateAction(PlayerState(isLoading: true)));
+  return loginAction(
+    store: store,
+    function: () async => await appAuth.authorizeAndExchangeCode(
+      AuthorizationTokenRequest(AUTH0_CLIENT_ID, AUTH0_REDIRECT_URI, issuer: 'https://$AUTH0_DOMAIN', scopes: ['openid', 'profile', 'offline_access'], promptValues: ['login']),
+    ),
+  );
 }
 
 Future<void> playerLogoutAction(Store<AppState> store) async {

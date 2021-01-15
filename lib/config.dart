@@ -8,3 +8,5 @@ const AUTH0_DOMAIN = 'critical-rpg.us.auth0.com';
 const AUTH0_CLIENT_ID = '0cBR1CWWJI1A7CO4b3q3d64o7Auh6A0U';
 const AUTH0_REDIRECT_URI = 'games.pixelfox.rpg://callback';
 const AUTH0_ISSUER = 'https://$AUTH0_DOMAIN';
+
+const SERVER_URL = "https://critical-rpg.herokuapp.com";

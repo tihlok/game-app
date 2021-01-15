@@ -4,7 +4,7 @@ import 'package:game_app_flutter/player.dart';
 import 'app.dart';
 
 class Profile extends StatelessWidget {
-  final PlayerState state;
+  final AppState state;
 
   Profile({this.state});
 
@@ -25,15 +25,15 @@ class Profile extends StatelessWidget {
             shape: BoxShape.circle,
             image: DecorationImage(
               fit: BoxFit.fill,
-              image: NetworkImage(this.state.profile["picture"] ?? ''),
+              image: NetworkImage(this.state.player.picture),
             ),
           ),
         ),
         SizedBox(height: 24.0),
-        Text(this.state.idToken["name"] ?? ''),
+        Text(this.state.player.id),
+        SizedBox(height: 24.0),
+        Text(this.state.player.name),
         SizedBox(height: 48.0),
-        // Text(this.player.toString()),
-        // SizedBox(height: 48.0),
         RaisedButton(
           onPressed: () => _onLogoutPressed(),
           child: Text('Logout'),
