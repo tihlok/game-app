@@ -1,13 +1,13 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:game_app_flutter/app.dart';
+import 'package:game_app_flutter/player.dart';
 
 class Login extends StatelessWidget {
-  final loginAction;
-  final String loginError;
+  const Login();
 
-  const Login(this.loginAction, this.loginError);
+  void _onLoginPressed() {
+    Redux.store.dispatch(playerLoginAction);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +18,9 @@ class Login extends StatelessWidget {
           image: AssetImage("assets/dice.png"),
         ),
         RaisedButton(
-          onPressed: () {
-            loginAction();
-          },
+          onPressed: () => _onLoginPressed(),
           child: Text("Login"),
         ),
-        Text(loginError ?? ""),
-        Text(kIsWeb ? "web" : Platform.operatingSystem)
       ],
     );
   }

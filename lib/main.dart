@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:game_app_flutter/login.dart';
 import 'package:game_app_flutter/player.dart';
+import 'package:game_app_flutter/profile.dart';
+import 'package:game_app_flutter/tab.dart';
 
 import 'app.dart';
 
@@ -41,8 +44,10 @@ class AppPage extends StatefulWidget {
 }
 
 class _AppPageState extends State<AppPage> {
-  void _onLoginPressed() {
-    Redux.store.dispatch(playerLoginAction);
+  @override
+  void initState() {
+    Redux.store.dispatch(playerTryQuickLoginAction);
+    super.initState();
   }
 
   @override
@@ -50,18 +55,27 @@ class _AppPageState extends State<AppPage> {
     return StoreConnector<AppState, PlayerState>(
         distinct: true,
         converter: (store) => store.state.playerState,
-        builder: (context, player) => Scaffold(
-            appBar: AppBar(title: Text(widget.title)),
-            body: Column(
-              children: <Widget>[
-                RaisedButton(
-                  child: Text("login"),
-                  onPressed: _onLoginPressed,
-                ),
-                Text("isLoading ${player.isLoading}"),
-                Text("isLoggedIn ${player.isLoggedIn}"),
-                Text("isError ${player.isError}"),
-              ],
-            )));
+        builder: (context, player) {
+          final tabs = [
+            TabData(icon: Icons.settings, page: Profile(state: player)),
+          ];
+
+          return DefaultTabController(
+              length: tabs.length,
+              child: Scaffold(
+                appBar: player.isLoggedIn
+                    ? AppBar(
+                        title: Center(child: Text("RPG")),
+                        bottom: TabBar(tabs: tabs.map((e) => e.tab).toList()),
+                      )
+                    : null,
+                body: Center(
+                    child: player.isLoading
+                        ? CircularProgressIndicator()
+                        : player.isLoggedIn
+                            ? TabBarView(children: tabs.map((e) => e.page).toList())
+                            : Login()),
+              ));
+        });
   }
 }

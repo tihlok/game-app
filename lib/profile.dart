@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:game_app_flutter/player.dart';
+
+import 'app.dart';
 
 class Profile extends StatelessWidget {
-  // Profile();
+  final PlayerState state;
+
+  Profile({this.state});
+
+  void _onLogoutPressed() {
+    Redux.store.dispatch(playerLogoutAction);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,19 +25,17 @@ class Profile extends StatelessWidget {
             shape: BoxShape.circle,
             image: DecorationImage(
               fit: BoxFit.fill,
-              image: NetworkImage(''),//this.player["profile"]["picture"] ?? ''),
+              image: NetworkImage(this.state.profile["picture"] ?? ''),
             ),
           ),
         ),
         SizedBox(height: 24.0),
-        Text(''),//this.player["idToken"]["name"]),
+        Text(this.state.idToken["name"] ?? ''),
         SizedBox(height: 48.0),
         // Text(this.player.toString()),
         // SizedBox(height: 48.0),
         RaisedButton(
-          onPressed: () {
-            // logoutAction();
-          },
+          onPressed: () => _onLogoutPressed(),
           child: Text('Logout'),
         ),
       ],
