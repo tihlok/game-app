@@ -1,4 +1,6 @@
 #!/bin/bash
 flutter build apk
-mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/app-game_app_flutter.apk
-rclone copy build/app/outputs/flutter-apk/app-game_app_flutter.apk drive:/apks/ -P
+mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/game_app_flutter.apk
+zip -r ../backup/game_app_flutter.zip ./
+rclone copy build/app/outputs/flutter-apk/game_app_flutter.apk drive:/apks/ -P
+rclone copy ../backup/game_app_flutter.zip drive:/backup/ -P
