@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:game_app_flutter/personas/Persona.dart';
+import 'package:meta/meta.dart';
 
 @immutable
 class PersonaState {
