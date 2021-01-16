@@ -15,17 +15,44 @@ jobs:
         with:
           channel: 'dev'
       - run: flutter pub get
-      - run: flutter build apk --debug
+      - run: flutter build apk --target-platform android-arm,android-arm64,android-x64 --split-per-abi --debug
+      - uses: papeloto/action-zip@v1
+        with:
+          files: build/app/outputs/apk/debug/
+          dest: apks.zip
       - uses: actions/upload-artifact@v1
         with:
-          name: release-apk
-          path: build/app/outputs/apk/debug/app-debug.apk
+          name: apks.zip
+          path: apks.zip
       - name: Create release and upload apk
         uses: underwindfall/create-release-with-debugapk@v2.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         with:
           tag_name: v1.0.1
-          asset_path: build/app/outputs/apk/debug/app-debug.apk
-          asset_name: rpg.apk
+          asset_path: apks.zip
+          asset_name: apks.zip
           asset_content_type: application/zip
+      - name: send apk to telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            🔥 game_app_flutter arm64-v8a-debug
+          document: build/app/outputs/apk/debug/app-arm64-v8a-debug.apk
+      - name: send apk to telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: 🔥 game_app_flutter armeabi-v7a-debug
+          document: build/app/outputs/apk/debug/app-armeabi-v7a-debug.apk
+      - name: send apk to telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            🔥 game_app_flutter x86_64-debug
+          document: build/app/outputs/apk/debug/app-x86_64-debug.apk
