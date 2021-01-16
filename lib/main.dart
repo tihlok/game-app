@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:game_app_flutter/components.dart';
 import 'package:game_app_flutter/login.dart';
 import 'package:game_app_flutter/personas.dart';
 import 'package:game_app_flutter/player.dart';
@@ -57,32 +58,19 @@ class AppPageState extends State<AppPage> with TickerProviderStateMixin {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return StoreConnector<AppState, AppState>(
+  Widget build(BuildContext context) => StoreConnector<AppState, AppState>(
         distinct: true,
         converter: (store) => store.state,
-        builder: (context, state) {
-          final tabs = [
+        builder: (context, state) => tabs(
+          isLoading: state.player.isLoading,
+          showAppBar: state.player.isLoggedIn,
+          showTabs: state.player.isLoggedIn,
+          defaultPage: Login(),
+          titleAppBar: "RPG",
+          tabs: [
             TabData(icon: Icons.accessibility, page: Personas(state: state)),
             TabData(icon: Icons.settings, page: Profile(state: state)),
-          ];
-
-          return DefaultTabController(
-              length: tabs.length,
-              child: Scaffold(
-                appBar: state.player.isLoggedIn
-                    ? AppBar(
-                        title: Center(child: Text("RPG")),
-                        bottom: TabBar(tabs: tabs.map((e) => e.tab).toList()),
-                      )
-                    : null,
-                body: Center(
-                    child: state.player.isLoading
-                        ? CircularProgressIndicator()
-                        : state.player.isLoggedIn
-                            ? TabBarView(children: tabs.map((e) => e.page).toList())
-                            : Login()),
-              ));
-        });
-  }
+          ],
+        ),
+      );
 }

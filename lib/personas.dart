@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:game_app_flutter/app.dart';
 import 'package:game_app_flutter/config.dart';
 import 'package:game_app_flutter/player.dart';
+import 'package:game_app_flutter/tab.dart';
 import 'package:game_app_flutter/theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:redux/redux.dart';
@@ -148,39 +149,35 @@ class PersonaDetail extends StatelessWidget {
   const PersonaDetail({this.persona});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: Center(child: Text(persona.name))),
-        body: Center(
-          child: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.only(bottom: 12.0),
-                height: 200,
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: NetworkImage(persona.imageURL),
-                  ),
-                ),
-              ),
-              textLine("Level", persona.level),
-              textLine("Power", persona.power),
-              textLine("Origem", persona.origin),
-              progressLine(persona.currentHP, persona.maxHP, "Vida", hp),
-              progressLine(persona.combatStress, 5, "Combate", combat),
-              progressLine(persona.tacticalStress, 5, "Tático", tactical),
-              list(
-                data: persona.skills,
-                item: (Skill skill) => listItem(
-                  title: "${skill.name}",
-                  subtitle: "power: ${skill.power}",
-                  trailing: Text(skill.type),
-                ),
-              )
-            ],
+  Widget build(BuildContext context) => tabs(titleAppBar: persona.name, tabs: [
+        TabData(
+          icon: Icons.sort,
+          title: "Atributos",
+          page: Center(
+            child: Column(
+              children: [
+                imageBanner(imageURL: persona.imageURL),
+                textLine("Level", persona.level),
+                textLine("Power", persona.power),
+                textLine("Origem", persona.origin),
+                progressLine(persona.currentHP, persona.maxHP, "Vida", hp),
+                progressLine(persona.combatStress, 5, "Combate", combat),
+                progressLine(persona.tacticalStress, 5, "Tático", tactical)
+              ],
+            ),
           ),
-        ));
-  }
+        ),
+        TabData(
+          icon: Icons.animation,
+          title: "Skills",
+          page: list(
+            data: persona.skills,
+            item: (Skill skill) => listItem(
+              title: "${skill.name}",
+              subtitle: "power: ${skill.power}",
+              trailing: Text(skill.type),
+            ),
+          ),
+        ),
+      ]);
 }
