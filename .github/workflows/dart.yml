@@ -1,19 +1,31 @@
-name: apk
-on:
-  push:
-    branches: [ flutter ]
+action.yml
+name: 'Flutter Runner'
+description: 'Github action for apk building for flutter apps.'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  ---------------------------------------
+main.yml
+on: push
+name: cleans, build and test app (mobile - android)
 jobs:
   build:
+    name: install dependencies
     runs-on: ubuntu-latest
-    container:
-      image:  google/dart:latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - uses: subosito/flutter-action@v1
-        with:
-          flutter-version: '1.22.4'
-      - run: flutter pub get
-      - run: flutter build apk
+    - uses: actions/checkout@master
+
+    - name: clean stale build and cache
+      uses: ./action
+      with:
+        args: clean
+
+    - name: install dependencies
+      uses: ./action
+      with:
+        args: pub get
+
+    - name: build apk
+      uses: ./action
+      with:
+        args: build apk
