@@ -8,6 +8,8 @@ import 'package:game_app_flutter/theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:redux/redux.dart';
 
+import 'components.dart';
+
 class Skill {
   final int id;
   final String name;
@@ -34,6 +36,7 @@ class Skill {
 class Persona {
   final int id;
   final String name;
+  final String origin;
   final String imageURL;
   final int level;
   final int maxHP;
@@ -45,6 +48,7 @@ class Persona {
   const Persona({
     this.id,
     this.name,
+    this.origin,
     this.imageURL,
     this.level,
     this.maxHP,
@@ -61,6 +65,7 @@ class Persona {
   factory Persona.fromJSON(Map<String, dynamic> json) => Persona(
         id: json["id"],
         name: json["name"],
+        origin: json["origin"],
         imageURL: json["image_url"],
         level: json["level"],
         maxHP: json["max_hp"],
@@ -124,70 +129,23 @@ class Personas extends StatelessWidget {
   Personas({this.state});
 
   @override
-  Widget build(BuildContext context) {
-    return this.state.persona.personas.length > 0
-        ? RefreshIndicator(
-            color: primary,
-            onRefresh: _onRefresh,
-            child: ListView.builder(
-                padding: EdgeInsets.all(8),
-                itemCount: this.state.persona.personas.length,
-                itemBuilder: (context, index) {
-                  final persona = this.state.persona.personas[index];
-                  return Container(
-                      height: 80,
-                      child: InkWell(
-                        splashColor: primary,
-                        highlightColor: transparent,
-                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PersonaDetail(persona: persona))),
-                        child: Card(
-                            semanticContainer: true,
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-                            elevation: 5,
-                            child: ListTile(
-                              tileColor: background,
-                              leading: CircleAvatar(
-                                radius: 30,
-                                backgroundImage: NetworkImage(persona.imageURL),
-                              ),
-                              title: Text(persona.title),
-                              subtitle: Text("power: ${persona.power}"),
-                              trailing: Icon(Icons.arrow_right_outlined, color: white),
-                            )),
-                      ));
-                }),
-          )
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[Text("nenhuma persona aqui...")],
-          );
-  }
+  Widget build(BuildContext context) => list(
+        data: this.state.persona.personas,
+        onRefresh: _onRefresh,
+        item: (Persona persona) => listItem(
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PersonaDetail(persona: persona))),
+          imageURL: persona.imageURL,
+          title: "[${persona.level}] ${persona.name}",
+          subtitle: "power: ${persona.power}",
+          trailing: Icon(Icons.arrow_right_outlined, color: white),
+        ),
+      );
 }
 
 class PersonaDetail extends StatelessWidget {
   final Persona persona;
 
   const PersonaDetail({this.persona});
-
-  progressLine(int current, int max, String text, color) => Row(
-        children: <Widget>[
-          Expanded(
-            flex: 2, // 20%
-            child: Text("$text $current/$max", textAlign: TextAlign.right),
-          ),
-          SizedBox(width: 10.0),
-          Expanded(
-            flex: 7, // 60%
-            child: LinearProgressIndicator(
-              backgroundColor: backgroundLight,
-              valueColor: AlwaysStoppedAnimation(color),
-              minHeight: 6,
-              value: current / max,
-            ),
-          ),
-        ],
-      );
 
   @override
   Widget build(BuildContext context) {
@@ -197,6 +155,7 @@ class PersonaDetail extends StatelessWidget {
           child: Column(
             children: [
               Container(
+                margin: EdgeInsets.only(bottom: 12.0),
                 height: 200,
                 decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
@@ -206,12 +165,20 @@ class PersonaDetail extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 24.0),
+              textLine("Level", persona.level),
+              textLine("Power", persona.power),
+              textLine("Origem", persona.origin),
               progressLine(persona.currentHP, persona.maxHP, "Vida", hp),
-              SizedBox(height: 12.0),
               progressLine(persona.combatStress, 5, "Combate", combat),
-              SizedBox(height: 12.0),
               progressLine(persona.tacticalStress, 5, "Tático", tactical),
+              list(
+                data: persona.skills,
+                item: (Skill skill) => listItem(
+                  title: "${skill.name}",
+                  subtitle: "power: ${skill.power}",
+                  trailing: Text(skill.type),
+                ),
+              )
             ],
           ),
         ));
