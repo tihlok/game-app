@@ -22,7 +22,7 @@ progressLine(int current, int max, String text, color) {
             Expanded(
               flex: 6, // 60%
               child: LinearProgressIndicator(
-                backgroundColor: backgroundLight,
+                backgroundColor: AppTheme.backgroundLight,
                 valueColor: AlwaysStoppedAnimation(color),
                 minHeight: 6,
                 value: current / max,
@@ -73,13 +73,13 @@ _list(data, item) => ListView.builder(
 
 list<T>({List<T> data, onRefresh, item}) => data.length > 0
     ? onRefresh != null
-        ? RefreshIndicator(color: primary, onRefresh: onRefresh, child: _list(data, item))
+        ? RefreshIndicator(color: AppTheme.primary, onRefresh: onRefresh, child: _list(data, item))
         : _list(data, item)
     : Column(mainAxisAlignment: MainAxisAlignment.center, children: [Text("nada aqui...")]);
 
 listItem({GestureTapCallback onTap, color, String imageURL, String title, String subtitle, dynamic trailing}) => InkWell(
-      splashColor: color ?? primary,
-      highlightColor: transparent,
+      splashColor: color ?? AppTheme.primary,
+      highlightColor: AppTheme.transparent,
       onTap: onTap ?? () {},
       child: Card(
           semanticContainer: true,
@@ -87,7 +87,7 @@ listItem({GestureTapCallback onTap, color, String imageURL, String title, String
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           elevation: 5,
           child: ListTile(
-            tileColor: background,
+            tileColor: AppTheme.background,
             leading: imageURL != null ? CircleAvatar(radius: 30, backgroundImage: NetworkImage(imageURL)) : null,
             title: title != null ? Text(title) : null,
             subtitle: subtitle != null ? Text(subtitle) : null,
@@ -101,7 +101,9 @@ tabs({
   bool showAppBar = true,
   bool showTabs = true,
   bool isLoading = false,
-  dynamic defaultPage
+  dynamic defaultPage,
+  floatingIcon,
+  floatingAction,
 }) =>
     DefaultTabController(
         length: (tabs ?? []).length,
@@ -118,4 +120,11 @@ tabs({
                   : showTabs
                       ? TabBarView(children: tabs.map((e) => e.page).toList())
                       : defaultPage),
+          floatingActionButton: floatingIcon != null
+              ? FloatingActionButton(
+                  child: Icon(floatingIcon, color: AppTheme.white),
+                  backgroundColor: AppTheme.primary,
+                  onPressed: floatingAction,
+                )
+              : null,
         ));

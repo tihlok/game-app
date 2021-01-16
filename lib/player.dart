@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:game_app_flutter/config.dart';
-import 'package:game_app_flutter/personas.dart';
+import 'package:game_app_flutter/personas/PersonaAction.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:redux/redux.dart';
@@ -81,7 +81,7 @@ Future<void> loginAction({Store<AppState> store, refreshToken, function}) async 
       idToken: parseIdToken(result.idToken),
       profile: await getUserDetails(result.accessToken),
     )));
-    await store.dispatch(loadPersonas);
+    await store.dispatch(PersonaAction.loadPersonas);
     return store.dispatch(SetPlayerStateAction(PlayerState(
       isLoading: false,
       isError: false,

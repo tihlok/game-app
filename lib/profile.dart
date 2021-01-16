@@ -15,6 +15,7 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final player = state.player;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -22,18 +23,18 @@ class Profile extends StatelessWidget {
           width: 150,
           height: 150,
           decoration: BoxDecoration(
-            border: Border.all(color: primary, width: 4.0),
+            border: Border.all(color: AppTheme.primary, width: 4.0),
             shape: BoxShape.circle,
             image: DecorationImage(
               fit: BoxFit.fill,
-              image: NetworkImage(this.state.player.picture),
+              image: NetworkImage(player.picture),
             ),
           ),
         ),
         SizedBox(height: 24.0),
-        Text(this.state.player.id),
+        Text(player.id),
         SizedBox(height: 24.0),
-        Text(this.state.player.name),
+        Text(player.name),
         SizedBox(height: 48.0),
         RaisedButton(
           onPressed: () => _onLogoutPressed(),

@@ -7,9 +7,9 @@ class TabData {
   Widget tab;
 
   TabData({this.icon, this.title, this.page}) {
-    this.tab = Tab(
-      icon: Icon(this.icon),
-      text: this.title,
+    tab = Tab(
+      icon: Icon(icon),
+      text: title,
     );
   }
 }

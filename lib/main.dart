@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:game_app_flutter/components.dart';
 import 'package:game_app_flutter/login.dart';
-import 'package:game_app_flutter/personas.dart';
+import 'package:game_app_flutter/personas/PersonaListPage.dart';
 import 'package:game_app_flutter/player.dart';
 import 'package:game_app_flutter/profile.dart';
 import 'package:game_app_flutter/tab.dart';
@@ -21,17 +21,17 @@ class RPGApp extends StatelessWidget {
     return MaterialApp(
       title: 'RPG',
       theme: ThemeData(
-          primaryColor: primary,
-          accentColor: white,
-          scaffoldBackgroundColor: background,
+          primaryColor: AppTheme.primary,
+          accentColor: AppTheme.white,
+          scaffoldBackgroundColor: AppTheme.background,
           textTheme: TextTheme(
-            subtitle1: TextStyle(color: white),
-            caption: TextStyle(color: white),
-            bodyText2: TextStyle(color: white),
+            subtitle1: TextStyle(color: AppTheme.white),
+            caption: TextStyle(color: AppTheme.white),
+            bodyText2: TextStyle(color: AppTheme.white),
           ),
           buttonTheme: ButtonThemeData(
             textTheme: ButtonTextTheme.primary,
-            buttonColor: primary,
+            buttonColor: AppTheme.primary,
           )),
       home: StoreProvider<AppState>(
         store: Redux.store,
@@ -68,7 +68,7 @@ class AppPageState extends State<AppPage> with TickerProviderStateMixin {
           defaultPage: Login(),
           titleAppBar: "RPG",
           tabs: [
-            TabData(icon: Icons.accessibility, page: Personas(state: state)),
+            TabData(icon: Icons.accessibility, page: PersonaListPage(state: state)),
             TabData(icon: Icons.settings, page: Profile(state: state)),
           ],
         ),

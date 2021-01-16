@@ -19,7 +19,7 @@ class Login extends StatelessWidget {
           image: AssetImage("assets/dice.png"),
         ),
         InkWell(
-          splashColor: primary,
+          splashColor: AppTheme.primary,
           onTap: () => _onLoginPressed(),
           child: Text("Login"),
         )

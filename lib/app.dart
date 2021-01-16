@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:game_app_flutter/personas.dart';
+import 'package:game_app_flutter/personas/PersonaAction.dart';
+import 'package:game_app_flutter/personas/PersonaReducer.dart';
+import 'package:game_app_flutter/personas/PersonaState.dart';
 import 'package:game_app_flutter/player.dart';
 import 'package:meta/meta.dart';
 import 'package:redux/redux.dart';
@@ -9,7 +11,7 @@ AppState appReducer(AppState state, dynamic action) {
   if (action is SetPlayerStateAction) {
     return state.copyWith(player: playerReducer(state.player, action));
   }
-  if (action is SetPersonaStateAction) {
+  if (action is PersonaAction) {
     return state.copyWith(persona: personaReducer(state.persona, action));
   }
   return state;
